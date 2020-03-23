@@ -8,7 +8,10 @@
 #include "py_image.h"
 #include "ff_wrapper.h"
 #include "libtf.h"
+#include "libtf_catsvsdogs_detect_model_data.h"
+#if 0
 #include "libtf_person_detect_model_data.h"
+#endif
 
 #ifdef IMLIB_ENABLE_TF
 
@@ -137,9 +140,14 @@ STATIC mp_obj_t int_py_tf_load(mp_obj_t path_obj, bool alloc_mode, bool helper_m
     py_tf_model_obj_t *tf_model = m_new_obj(py_tf_model_obj_t);
     tf_model->base.type = &py_tf_model_type;
 
+    if (!strcmp(path, "catsvsdogs_detection")) {
+        tf_model->model_data = (unsigned char *) g_catsvsdogs_detect_model_data;
+        tf_model->model_data_len = g_catsvsdogs_detect_model_data_len;
+#if 0
     if (!strcmp(path, "person_detection")) {
         tf_model->model_data = (unsigned char *) g_person_detect_model_data;
         tf_model->model_data_len = g_person_detect_model_data_len;
+#endif
     } else {
         FIL fp;
         file_read_open(&fp, path);
@@ -211,7 +219,7 @@ typedef struct py_tf_input_data_callback_data {
 } py_tf_input_data_callback_data_t;
 
 STATIC void py_tf_input_data_callback(void *callback_data,
-                                      unsigned char *model_input,
+                                      float *model_input,
                                       const unsigned int input_height,
                                       const unsigned int input_width,
                                       const unsigned int input_channels)
@@ -296,9 +304,9 @@ STATIC void py_tf_input_data_callback(void *callback_data,
                         }
                         case 3: {
                             int index_3 = index * 3;
-                            model_input[index_3 + 0] = COLOR_RGB565_TO_R8(pixel);
-                            model_input[index_3 + 1] = COLOR_RGB565_TO_G8(pixel);
-                            model_input[index_3 + 2] = COLOR_RGB565_TO_B8(pixel);
+                            model_input[index_3 + 0] = ((float) COLOR_RGB565_TO_R8(pixel) / 127.5f) - 1.0f;
+                            model_input[index_3 + 1] = ((float) COLOR_RGB565_TO_G8(pixel) / 127.5f) - 1.0f;
+                            model_input[index_3 + 2] = ((float) COLOR_RGB565_TO_B8(pixel) / 127.5f) - 1.0f;
                             break;
                         }
                         default: {
@@ -320,7 +328,7 @@ typedef struct py_tf_classify_output_data_callback_data {
 } py_tf_classify_output_data_callback_data_t;
 
 STATIC void py_tf_classify_output_data_callback(void *callback_data,
-                                                unsigned char *model_output,
+                                                float *model_output,
                                                 const unsigned int output_height,
                                                 const unsigned int output_width,
                                                 const unsigned int output_channels)
@@ -332,7 +340,7 @@ STATIC void py_tf_classify_output_data_callback(void *callback_data,
 
     arg->out = mp_obj_new_list(output_channels, NULL);
     for (unsigned int i = 0; i < output_channels; i++) {
-        ((mp_obj_list_t *) arg->out)->items[i] = mp_obj_new_float(model_output[i] / 255.0f);
+        ((mp_obj_list_t *) arg->out)->items[i] = mp_obj_new_float(model_output[i]);
     }
 }
 
@@ -422,7 +430,7 @@ typedef struct py_tf_segment_output_data_callback_data {
 } py_tf_segment_output_data_callback_data_t;
 
 STATIC void py_tf_segment_output_data_callback(void *callback_data,
-                                               unsigned char *model_output,
+                                               float *model_output,
                                                const unsigned int output_height,
                                                const unsigned int output_width,
                                                const unsigned int output_channels)
