@@ -744,6 +744,7 @@ extern const int8_t kernel_gauss_5[25];
 extern const int kernel_laplacian_3[9];
 extern const int kernel_high_pass_3[9];
 
+#ifdef IMLIB_ENABLE_LAB_LUT
 #define IM_RGB5652L(p) \
     ({ __typeof__ (p) _p = (p); \
        lab_table[_p * 3]; })
@@ -755,6 +756,7 @@ extern const int kernel_high_pass_3[9];
 #define IM_RGB5652B(p) \
     ({ __typeof__ (p) _p = (p); \
        lab_table[(_p * 3) + 2]; })
+#endif
 
 // Grayscale maxes
 #define IM_MAX_GS (255)

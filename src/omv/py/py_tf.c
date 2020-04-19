@@ -8,7 +8,7 @@
 #include "py_image.h"
 #include "ff_wrapper.h"
 #include "libtf.h"
-#include "libtf_catsvsdogs_detect_model_data.h"
+#include "libtf_catsvsdogs_classify_model_data.h"
 #if 0
 #include "libtf_person_detect_model_data.h"
 #endif
@@ -140,9 +140,9 @@ STATIC mp_obj_t int_py_tf_load(mp_obj_t path_obj, bool alloc_mode, bool helper_m
     py_tf_model_obj_t *tf_model = m_new_obj(py_tf_model_obj_t);
     tf_model->base.type = &py_tf_model_type;
 
-    if (!strcmp(path, "catsvsdogs_detection")) {
-        tf_model->model_data = (unsigned char *) g_catsvsdogs_detect_model_data;
-        tf_model->model_data_len = g_catsvsdogs_detect_model_data_len;
+    if (!strcmp(path, "catsvsdogs_classification")) {
+        tf_model->model_data = (unsigned char *) g_catsvsdogs_classify_model_data;
+        tf_model->model_data_len = g_catsvsdogs_classify_model_data_len;
 #if 0
     if (!strcmp(path, "person_detection")) {
         tf_model->model_data = (unsigned char *) g_person_detect_model_data;

@@ -16,12 +16,12 @@ limitations under the License.
 // This is a standard TensorFlow Lite model file that has been converted into a
 // C data array, so it can be easily compiled into a binary for devices that
 // don't have a file system. It was created using the command:
-// xxd -i person_detect.tflite > person_detect_model_data.cc
+// xxd -i catsvsdogs_model.tflite > libtf_catsvsdogs_classify_model_data.cc
 
-#ifndef TENSORFLOW_LITE_EXPERIMENTAL_MICRO_EXAMPLES_CATSVSDOGS_DETECTION_CATSVSDOGS_DETECT_MODEL_DATA_H_
-#define TENSORFLOW_LITE_EXPERIMENTAL_MICRO_EXAMPLES_CATSVSDOGS_DETECTION_CATSVSDOGS_DETECT_MODEL_DATA_H_
+#ifndef TENSORFLOW_LITE_EXPERIMENTAL_MICRO_EXAMPLES_CATSVSDOGS_CLASSIFICATION_CATSVSDOGS_CLASSIFY_MODEL_DATA_H_
+#define TENSORFLOW_LITE_EXPERIMENTAL_MICRO_EXAMPLES_CATSVSDOGS_CLASSIFICATION_CATSVSDOGS_CLASSIFY_MODEL_DATA_H_
 
-extern const unsigned char g_catsvsdogs_detect_model_data[];
-extern const int g_catsvsdogs_detect_model_data_len;
+extern const unsigned char g_catsvsdogs_classify_model_data[];
+extern const int g_catsvsdogs_classify_model_data_len;
 
-#endif  // TENSORFLOW_LITE_EXPERIMENTAL_MICRO_EXAMPLES_CATSVSDOGS_DETECTION_CATSVSDOGS_DETECT_MODEL_DATA_H_
+#endif  // TENSORFLOW_LITE_EXPERIMENTAL_MICRO_EXAMPLES_CATSVSDOGS_CLASSIFICATION_CATSVSDOGS_CLASSIFY_MODEL_DATA_H_
